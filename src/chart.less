@@ -1,0 +1,41 @@
+.chart-container {
+  padding: 10px;
+}
+
+.chart {
+  padding: 0;
+  margin: 0;
+}
+
+.chart-popup {
+  position: fixed;
+  z-index: 1000;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  font: 12px Arial, Helvetica;
+  max-width: 180px;
+  max-height: 100px;
+  .title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    float: left;
+    width: 100%;
+    .percentage {
+      margin-left: 4px;
+      float: right;
+    }
+  }
+  .value, .label, .units, .percentage {
+    display: inline;
+    float: left;
+    margin-right: 4px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  .units, .percentage {
+    color: #999;
+  }
+}

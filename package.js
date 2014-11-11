@@ -8,8 +8,15 @@ Package.describe({
 
 Package.onUse(function (api) {
   api.versionsFrom('METEOR@0.9.0');
-  api.use(['templating', 'jquery', 'underscore', 'coffeescript', 'aramk:utility@0.3.0',
-    'aramk:vega@1.4.2'], 'client');
+  api.use([
+    'coffeescript',
+    'jquery',
+    'less',
+    'templating',
+    'underscore',
+    'aramk:utility@0.3.0',
+    'aramk:vega@1.4.2'
+    ],'client');
   api.imply('aramk:vega');
   // TODO(aramk) Perhaps expose the charts through the Vega object only to avoid cluttering the
   // namespace.
@@ -17,7 +24,10 @@ Package.onUse(function (api) {
     'Vega', 'PieChart'
   ], 'client');
   api.addFiles([
-    'src/Vega.coffee', 'src/PieChart.coffee', 'src/meteor/pieChart.html',
-    'src/meteor/pieChart.coffee'
+    'src/Vega.coffee',
+    'src/PieChart.coffee',
+    'src/chart.less',
+    'src/meteor/pieChart.html',
+    'src/meteor/pieChart.coffee',
   ], 'client');
 });

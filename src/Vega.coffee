@@ -4,8 +4,8 @@ Vega =
   # @param {Object|String} spec - The Vega spec in JSON format or a URL.
   # @param {jQuery|HTMLElement} el - The HTML element to render the chart in.
   # @param {Object} [options]
-  # @param {Boolean} [options.resize] - Whether to resize the chart based on the dimensions of the
-  # given HTML element.
+  # @param {Boolean} [options.resize=false] - Whether to resize the chart based on the dimensions of
+  # the given HTML element. This overrides the height and width set in the spec.
   # @returns {$.Deferred}
   render: (spec, el, options) ->
     options = _.extend({

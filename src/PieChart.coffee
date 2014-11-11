@@ -19,9 +19,17 @@ class PieChart
         $popup = popups[index]
         unless $popup
           value = data.value
+          units = data.units
           percentage = value / valueSum
-          body = data.value + ' (' + Strings.format.percentage(percentage) + ')'
-          $popup = createPopup(title: data.label, body: body)
+          round = data.round ? 2
+          value = value.toFixed(round) if round
+          title = '<div class="label">' + data.label + '</div>'
+          title += '<div class="percentage">' + Strings.format.percentage(percentage) + '</div>'
+          body = data.text
+          unless body
+            body = '<div class="value">' + value + '</div>'
+            body += '<div class="units">' + units + '</div>' if units?
+          $popup = createPopup(title: title, body: body)
           popups[index] = $popup
           $('body').append($popup)
         $popup.show()
@@ -41,14 +49,14 @@ class PieChart
     args = _.extend({
       width: 400
       height: 400
-      paddingForText: 16
+      paddingForbody: 16
       labels: true
     }, args)
     values = args.values
     width = args.width
     height = args.height
-    paddingForText = args.paddingForText
-    radius = args.radius ? Math.min(height, width) / 2 - paddingForText
+    paddingForbody = args.paddingForbody
+    radius = args.radius ? Math.min(height, width) / 2 - paddingForbody
     spec = _.extend({
       width: width,
       height: height,
@@ -88,21 +96,21 @@ class PieChart
     }, args)
     if args.labels
       spec.marks.push({
-        type: 'text',
+        type: 'body',
         from: {data: 'table'},
         properties: {
           enter: {
             x: {group: 'width', mult: 0.5},
             y: {group: 'height', mult: 0.5},
-            radius: {value: radius, offset: paddingForText / 2},
+            radius: {value: radius, offset: paddingForbody / 2},
             theta: {field: 'midAngle'},
             fill: {value: '#000'},
             align: {value: 'center'},
             baseline: {value: 'middle'},
-            text: {field: 'data.label'}
+            body: {field: 'data.label'}
           },
           hover: {
-            text: {field: 'data.value'}
+            body: {field: 'data.value'}
           }
         }
       })
@@ -123,8 +131,8 @@ class PieChart
 
   addColors: (values, colors) ->
     itemColors = @generateUniqueColors(colors, values.length)
-    _.each values, (item, i) ->
-      item.color = itemColors[i]
+    _.each values, (item) ->
+      item.color ?= itemColors.pop()
 
   generateUniqueColors: (colors, size) ->
     colors = _.shuffle(colors)
@@ -157,11 +165,9 @@ class PieChart
     '#ffba14'
     '#f9ec15'
     '#75b313'
-    '#0095ca'
-    '#3676ff'
+    '#00e37d'
+    '#3695ff'
     '#7c3dff'
     '#7f0894'
     '#b6095b'
   ]
-
-
