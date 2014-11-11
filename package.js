@@ -14,6 +14,7 @@ Package.onUse(function (api) {
     'less',
     'templating',
     'underscore',
+    'aramk:q@1.0.1',
     'aramk:utility@0.3.0',
     'aramk:vega@1.4.2'
     ],'client');

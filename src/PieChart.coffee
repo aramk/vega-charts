@@ -9,9 +9,14 @@ class PieChart
     spec = @generateSpec(_.extend(args, {values: items}))
     valueSum = Maths.sum items, (item) -> item.value
     vegaOptions = {}
-    # vegaOptions.resize = args.resize if args.resize?
-    Vega.render(spec, @$em, vegaOptions).then (args) ->
-      view = args.view
+    vegaDf = Vega.render(spec, @$em, vegaOptions)
+    formatterDf = args.formatter
+    unless formatterDf && formatterDf.then?
+      formatterDf = Q.defer()
+      formatterDf.resolve(args.formatter)
+    Q.all([vegaDf, formatterDf]).then (results) ->
+      [vegaResult, formatter] = results
+      view = vegaResult.view
       popups = []
       view.on 'mouseover', (event, item) ->
         data = item.datum.data
@@ -21,8 +26,11 @@ class PieChart
           value = data.value
           units = data.units
           percentage = value / valueSum
-          round = data.round ? 2
-          value = value.toFixed(round) if round
+          if formatter
+            value = formatter(value)
+          else
+            round = data.round ? 2
+            value = value.toFixed(round) if round
           title = '<div class="label">' + data.label + '</div>'
           title += '<div class="percentage">' + Strings.format.percentage(percentage) + '</div>'
           body = data.text

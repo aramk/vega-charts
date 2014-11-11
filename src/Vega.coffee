@@ -6,12 +6,12 @@ Vega =
   # @param {Object} [options]
   # @param {Boolean} [options.resize=false] - Whether to resize the chart based on the dimensions of
   # the given HTML element. This overrides the height and width set in the spec.
-  # @returns {$.Deferred}
+  # @returns {Promise}
   render: (spec, el, options) ->
     options = _.extend({
       resize: false
     }, options)
-    df = $.Deferred()
+    df = Q.defer()
     $el = $(el)
     @getSpec(spec).then(
       (spec) ->
@@ -24,18 +24,18 @@ Vega =
           df.resolve(chart: chart, view: view)
       df.reject
     )
-    df
+    df.promise
 
   # @param {Object|String} spec - The Vega spec in JSON format or a URL.
-  # @returns {$.Deferred} A promise containing the Vega spec in JSON format.
+  # @returns {Promise} A promise containing the Vega spec in JSON format.
   getSpec: (spec) ->
     if Types.isString(spec)
       specDf = @requestSpec(spec)
     else
-      specDf = $.Deferred()
+      specDf = Q.defer()
       specDf.resolve(spec)
-    specDf
+    specDf.promise
 
   # @param {String} url - The URL to the Vega spec.
-  # @returns {$.Deferred} A promise containing the Vega spec in JSON format.
+  # @returns {Promise} A promise containing the Vega spec in JSON format.
   requestSpec: (url) -> $.getJSON(url)
