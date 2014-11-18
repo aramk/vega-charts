@@ -7,49 +7,54 @@ class PieChart
     items = @generateItems(args.items)
     @addColors(items, args.colors ? @DEFAULT_COLORS)
     spec = @generateSpec(_.extend(args, {values: items}))
-    valueSum = Maths.sum items, (item) -> item.value
     vegaOptions = {}
     vegaDf = Vega.render(spec, @$em, vegaOptions)
-    formatterDf = args.formatter
-    unless formatterDf && formatterDf.then?
-      formatterDf = Q.defer()
-      formatterDf.resolve(args.formatter)
-    Q.all([vegaDf, formatterDf]).then (results) ->
+    Q.all([vegaDf, args.formatter]).then (results) =>
       [vegaResult, formatter] = results
       view = vegaResult.view
+      valueSum = Maths.sum items, (item) -> item.value
       popups = []
-      view.on 'mouseover', (event, item) ->
-        data = item.datum.data
+      getOrCreatePopup = (item) =>
         index = item.datum.index
         $popup = popups[index]
         unless $popup
-          value = data.value
-          units = data.units
-          percentage = value / valueSum
-          if formatter
-            value = formatter(value)
-          else
-            round = data.round ? 2
-            value = value.toFixed(round) if round
-          title = '<div class="label">' + data.label + '</div>'
-          title += '<div class="percentage">' + Strings.format.percentage(percentage) + '</div>'
-          body = data.text
-          unless body
-            body = '<div class="value">' + value + '</div>'
-            body += '<div class="units">' + units + '</div>' if units?
-          $popup = createPopup(title: title, body: body)
-          popups[index] = $popup
+          $popup = @createPopup(item, valueSum, formatter)
           $('body').append($popup)
-        $popup.show()
-        setPositionFromEvent($popup, event)
-      view.on 'mousemove', (event, item) ->
-        index = item.datum.index
-        $popup = popups[index]
-        setPositionFromEvent($popup, event)
+          popups[index] = $popup
+        $popup
+      view.on 'mouseover', (event, item) =>
+        $popup = getOrCreatePopup(item)
+        if $popup
+          $popup.show()
+          @setPositionFromEvent($popup, event)
+      view.on 'mousemove', (event, item) =>
+        $popup = getOrCreatePopup(item)
+        @setPositionFromEvent($popup, event) if $popup
       view.on 'mouseout', (event, item) ->
-        index = item.datum.index
-        $popup = popups[index]
+        $popup = getOrCreatePopup(item)
         $popup.hide() if $popup
+
+  createPopup: (item, valueSum, formatter) ->
+    data = item.datum.data
+    index = item.datum.index
+    value = data.value
+    units = data.units
+    percentage = value / valueSum
+    if formatter
+      try
+        value = formatter(value)
+      catch e
+        console.error('Error formatting popup', e)
+    else
+      round = data.round ? 2
+      value = value.toFixed(round) if round
+    title = '<div class="label">' + data.label + '</div>'
+    title += '<div class="percentage">' + Strings.format.percentage(percentage) + '</div>'
+    body = data.text
+    unless body
+      body = '<div class="value">' + value + '</div>'
+      body += '<div class="units">' + units + '</div>' if units?
+    @createPopupElement(title: title, body: body)
 
   getElement: -> @$em
 
@@ -154,7 +159,7 @@ class PieChart
         results.push(tinycolor(color).darken(0.1).toHexString())
     results
 
-  createPopup = (data) ->
+  createPopupElement: (data) ->
     $em = $('<div class="chart-popup"></div>')
     title = data.title
     body = data.body
@@ -162,7 +167,7 @@ class PieChart
     $em.append($('<div class="body">' + body + '</div>')) if body?
     $em
 
-  setPositionFromEvent = ($em, event) ->
+  setPositionFromEvent: ($em, event) ->
     offset = {x: 10, y: 0}
     $em.css('left', event.clientX + offset.x)
     $em.css('top', event.clientY + offset.y)

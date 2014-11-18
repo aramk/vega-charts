@@ -30,12 +30,15 @@ Vega =
   # @returns {Promise} A promise containing the Vega spec in JSON format.
   getSpec: (spec) ->
     if Types.isString(spec)
-      specDf = @requestSpec(spec)
+      @requestSpec(spec)
     else
       specDf = Q.defer()
       specDf.resolve(spec)
-    specDf.promise
+      specDf.promise
 
   # @param {String} url - The URL to the Vega spec.
   # @returns {Promise} A promise containing the Vega spec in JSON format.
-  requestSpec: (url) -> $.getJSON(url)
+  requestSpec: (url) ->
+    df = Q.defer()
+    $.getJSON(url).then(df.resolve, df.reject)
+    df.promise
