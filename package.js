@@ -22,13 +22,17 @@ Package.onUse(function (api) {
   // TODO(aramk) Perhaps expose the charts through the Vega object only to avoid cluttering the
   // namespace.
   api.export([
-    'Vega', 'PieChart'
+    'Vega', 'Chart', 'PieChart', 'LineChart'
   ], 'client');
   api.addFiles([
     'src/Vega.coffee',
-    'src/PieChart.coffee',
+    'src/charts/Chart.coffee',
+    'src/charts/PieChart.coffee',
+    'src/charts/LineChart.coffee',
     'src/chart.less',
     'src/meteor/pieChart.html',
     'src/meteor/pieChart.coffee',
+    'src/meteor/lineChart.html',
+    'src/meteor/lineChart.coffee'
   ], 'client');
 });
