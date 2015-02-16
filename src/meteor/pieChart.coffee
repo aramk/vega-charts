@@ -11,4 +11,6 @@ TemplateClass.rendered = ->
     args.width ?= width unless width == 0
     args.height ?= height unless height == 0
   chart = new PieChart(args)
-  $container.append(chart.getElement())
+  $chart = chart.getElement()
+  $container.append($chart)
+  $container.toggle(chart.items.length != 0)

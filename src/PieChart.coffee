@@ -4,15 +4,15 @@ class PieChart
 
   constructor: (args) ->
     @$em = $('<div class="chart"></div>')
-    items = @generateItems(args.items)
-    @addColors(items, args.colors ? @DEFAULT_COLORS)
-    spec = @generateSpec(_.extend(args, {values: items}))
+    @items = @generateItems(args.items)
+    @addColors(@items, args.colors ? @DEFAULT_COLORS)
+    spec = @generateSpec(_.extend(args, {values: @items}))
     vegaOptions = {}
     vegaDf = Vega.render(spec, @$em, vegaOptions)
     Q.all([vegaDf, args.formatter]).then (results) =>
       [vegaResult, formatter] = results
       view = vegaResult.view
-      valueSum = Maths.sum items, (item) -> item.value
+      valueSum = Maths.sum @items, (item) -> item.value
       popups = []
       getOrCreatePopup = (item) =>
         index = item.datum.index
@@ -68,6 +68,10 @@ class PieChart
     values = args.values
     width = args.width
     height = args.height
+    # if values.length == 0
+    #   # Collapse the chart if there're no values to show.
+    #   width = 0
+    #   height = 0
     paddingForbody = args.paddingForbody
     radius = args.radius ? Math.min(height, width) / 2 - paddingForbody
     spec = _.extend({
