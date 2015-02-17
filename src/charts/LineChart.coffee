@@ -4,13 +4,13 @@ class LineChart extends Chart
     args = _.extend({
       width: 400
       height: 400
-      paddingForbody: 16
-      labels: true
+      # paddingForbody: 16
     }, args)
     values = args.values
-    paddingDiff = 2 * args.paddingForbody
-    width = args.width -= paddingDiff
-    height = args.height -= paddingDiff
+    # paddingDiff = 2 * args.paddingForbody
+    width = args.width# -= paddingDiff
+    height = args.height# -= paddingDiff
+    labels = args.labels
     _.extend({
       width: width,
       height: height,
@@ -20,7 +20,7 @@ class LineChart extends Chart
           values: values,
           format: {
             type: 'json',
-            parse: {x: 'date'}
+            parse: args.format
           }
         }
       ],
@@ -43,8 +43,8 @@ class LineChart extends Chart
         }
       ],
       axes: [
-        {type: 'x', scale: 'x', tickSizeEnd: 0},
-        {type: 'y', scale: 'y'}
+        {type: 'x', scale: 'x', tickSizeEnd: 0, title: labels?.x},
+        {type: 'y', scale: 'y', title: labels?.y}
       ],
       marks: [
         {

@@ -1,14 +1,7 @@
 class PieChart extends Chart
 
-  $em: null
-
-  constructor: (args) ->
-    @$em = $('<div class="chart"></div>')
-    @items = @generateItems(args.items)
-    @addColors(@items, args.colors ? @DEFAULT_COLORS)
-    spec = @generateSpec(_.extend(args, {values: @items}))
-    vegaOptions = {}
-    vegaDf = Vega.render(spec, @$em, vegaOptions)
+  render: (args) ->
+    vegaDf = super(args)
     Q.all([vegaDf, args.formatter]).then (results) =>
       [vegaResult, formatter] = results
       view = vegaResult.view

@@ -6,6 +6,9 @@ class Chart
     @$em = $('<div class="chart"></div>')
     @items = @generateItems(args.items)
     @addColors(@items, args.colors ? @DEFAULT_COLORS)
+    @render(args)
+
+  render: (args) ->
     spec = @generateSpec(_.extend(args, {values: @items}))
     console.log('spec', spec)
     vegaOptions = {}

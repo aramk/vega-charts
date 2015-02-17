@@ -1,9 +1,11 @@
 TemplateClass = Template.lineChart
 TemplateClass.rendered = ->
   $container = @$('.chart-container')
+  settings = @data.settings
+  delete @data.settings
   args = _.extend({
     resize: true
-  }, @data)
+  }, settings, @data)
   if $container.length > 0 || !args.resize
     width = $container.width()
     height = $container.height()
