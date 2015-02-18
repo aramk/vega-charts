@@ -1,26 +1,17 @@
 class LineChart extends Chart
 
-  generateSpec: (args) ->
-    args = _.extend({
-      width: 400
-      height: 400
-      # paddingForbody: 16
-    }, args)
-    values = args.values
-    # paddingDiff = 2 * args.paddingForbody
-    width = args.width# -= paddingDiff
-    height = args.height# -= paddingDiff
-    labels = args.labels
+  generateSpec: (spec) ->
+    spec = super(spec)
+    values = spec.values
+    labels = spec.labels
     _.extend({
-      width: width,
-      height: height,
       data: [
         {
           name: 'values',
           values: values,
           format: {
             type: 'json',
-            parse: args.format
+            parse: spec.format
           }
         }
       ],
@@ -83,14 +74,14 @@ class LineChart extends Chart
           ]
         }
       ]
-    }, args)
+    }, spec)
 
   generateItems: (values) ->
     if Types.isObject(values)
       items = []
       _.each values, (series, label) ->
-        _.each series, (yValue, xValue) ->
-          items.push({label: label, x: xValue, y: yValue})
+        _.each series, (datum) ->
+          items.push({label: label, x: datum.x, y: datum.y})
     else if Types.isArray(values)
       items = values
     else

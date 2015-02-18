@@ -1,6 +1,7 @@
 class PieChart extends Chart
 
   render: (args) ->
+    args = _.extend(@options, args)
     vegaDf = super(args)
     Q.all([vegaDf, args.formatter]).then (results) =>
       [vegaResult, formatter] = results
@@ -49,18 +50,20 @@ class PieChart extends Chart
       body += '<div class="units">' + units + '</div>' if units?
     @createPopupElement(title: title, body: body)
 
-  generateSpec: (args) ->
-    args = _.extend({
+  generateSpec: (spec) ->
+    spec = super(spec)
+    _.extend({
+      # Dimensions are necessary for pie charts to calculate the radius.
       width: 400
       height: 400
-      paddingForbody: 16
-      labels: true
-    }, args)
-    values = args.values
-    width = args.width
-    height = args.height
-    paddingForbody = args.paddingForbody
-    radius = args.radius ? Math.min(height, width) / 2 - paddingForbody
+    }, spec)
+    values = spec.values
+    width = spec.width
+    height = spec.height
+    paddingForbody = spec.paddingForbody
+    radius = spec.radius
+    if !radius? && (width? || height?)
+      radius = Math.min(height, width) / 2 - paddingForbody
     spec = _.extend({
       width: width,
       height: height,
@@ -97,8 +100,8 @@ class PieChart extends Chart
           }
         }
       ]
-    }, args)
-    if args.labels
+    }, spec)
+    if spec.labels
       spec.marks.push({
         type: 'body',
         from: {data: 'table'},

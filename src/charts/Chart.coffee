@@ -1,28 +1,59 @@
 class Chart
 
   $em: null
+  $container: null
+  options: null
+  renderPromise: null
 
   constructor: (args) ->
-    @$em = $('<div class="chart"></div>')
-    @items = @generateItems(args.items)
+    @options = args ?= {}
+    items = args.items
+    unless items
+      throw new Error('No items provided')
+    @$em = $(args.element ? '<div class="chart"></div>')
+    # The container is used to determine the bounding dimensions of the chart.
+    @$container = $(args.container ? @$em)
+    # Remove so cloning in Vega doesn't use the elements.
+    delete args.container
+    delete args.element
+    @items = @generateItems(items)
     @addColors(@items, args.colors ? @DEFAULT_COLORS)
-    @render(args)
 
   render: (args) ->
+    args = _.extend(@options, args)
     spec = @generateSpec(_.extend(args, {values: @items}))
     console.log('spec', spec)
-    vegaOptions = {}
-    Vega.render(spec, @$em, vegaOptions)
+    @renderPromise = Vega.render(spec, @$em, args)
 
   getElement: -> @$em
 
-  generateSpec: (args) ->
-    args = _.extend({
+  # @param {Object} [spec] The spec object expected by Vega.
+  # @param {Boolean|Object} [args.resize=false] - Whether to resize the chart based on the
+  #      space available to the container element. If an object is provided, it can contain "height"
+  #      and "width" components. This overrides any height or width values in the spec. If the
+  #      container element isn't in the DOM, this setting will have no effect since its bounding
+  #      dimensions cannot be determined.
+  generateSpec: (spec) ->
+    spec = _.extend({
       width: 400
       height: 400
       paddingForbody: 16
       labels: true
-    }, args)
+    }, spec)
+    resize = spec.resize
+    $parent = @$container.parent()
+    if resize && $parent
+      if resize == true
+        resize = {width: true, height: true}
+      padding = _.extend({top: 0, bottom: 0, left: 0, right: 0}, spec.padding)
+      parentWidth = $parent.width()
+      parentHeight = $parent.height()
+      # Ignore 0 width or height values.
+      if resize.width && parentWidth
+        spec.width = parentWidth - padding.left - padding.right
+      if resize.height && parentHeight
+        spec.height = parentHeight - padding.top - padding.bottom
+    spec
 
   generateItems: (values) -> values
 

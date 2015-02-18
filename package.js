@@ -30,9 +30,7 @@ Package.onUse(function (api) {
     'src/charts/PieChart.coffee',
     'src/charts/LineChart.coffee',
     'src/chart.less',
-    'src/meteor/pieChart.html',
-    'src/meteor/pieChart.coffee',
-    'src/meteor/lineChart.html',
-    'src/meteor/lineChart.coffee'
+    'src/meteor/chart.html',
+    'src/meteor/chart.coffee'
   ], 'client');
 });
