@@ -12,8 +12,6 @@ TemplateClass.rendered = ->
   settings = @data.settings
   delete @data.settings
   args = _.extend({
-    # Since we have a container, ensure the chart fills as much space as the container allows.
-    resize: true
     resizeContainer: false
     container: $container
   }, settings, @data)

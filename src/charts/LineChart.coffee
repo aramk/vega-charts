@@ -4,6 +4,20 @@ class LineChart extends Chart
     spec = super(spec)
     values = spec.values
     labels = spec.labels
+
+    yLabel = labels?.y
+    if yLabel
+      # Truncate the values in the y-axis so they don't overflow onto the label.
+      yValueLengths = _.map values, (value) -> (Math.floor(value.y).toString() ? '').length
+      maxYLength = _.max yValueLengths
+      tens = maxYLength - 1
+      divisor = 1
+      if tens > 1
+        divisor = Math.pow(10, tens)
+        _.each values, (value) ->
+          value.y /= divisor
+        yLabel += ' (x10^' + tens + ')'
+
     _.extend({
       data: [
         {
@@ -35,7 +49,7 @@ class LineChart extends Chart
       ],
       axes: [
         {type: 'x', scale: 'x', tickSizeEnd: 0, title: labels?.x},
-        {type: 'y', scale: 'y', title: labels?.y}
+        {type: 'y', scale: 'y', title: yLabel}
       ],
       marks: [
         {
