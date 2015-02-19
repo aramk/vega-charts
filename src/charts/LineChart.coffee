@@ -1,5 +1,12 @@
 class LineChart extends Chart
 
+  # @type {Object.<String, Object>} Options for each series.
+  seriesMap: null
+
+  constructor: (args) ->
+    @seriesMap = {}
+    super(args)
+
   generateSpec: (spec) ->
     spec = super(spec)
     values = spec.values
@@ -18,35 +25,56 @@ class LineChart extends Chart
           value.y /= divisor
         yLabel += ' (x10^' + tens + ')'
 
+    data = [
+      {
+        name: 'values',
+        values: values,
+        format: {
+          type: 'json',
+          parse: spec.format
+        }
+      }
+    ]
+    
+    scales = [
+      {
+        name: 'x',
+        type: 'time',
+        range: 'width',
+        domain: {data: 'values', field: 'data.x'}
+      },
+      {
+        name: 'y',
+        type: 'linear',
+        range: 'height',
+        nice: true,
+        domain: {data: 'values', field: 'data.y'}
+      }
+    ]
+
+    seriesArray = _.values(@seriesMap)
+
+    seriesData = {
+      name: 'series',
+      values: seriesArray
+    }
+    data.push(seriesData)
+
+    hasColors = _.some seriesArray, (series) -> return true if series.color
+    if hasColors
+      defaultColors = @generateUniqueColors(@DEFAULT_COLORS, seriesArray.length)
+      _.each @seriesMap, (series, label) ->
+        unless series.color
+          series.color = defaultColors.pop()
+      # Provide a set of colors from the series data. The line mark then selects the same color for
+      # each different label value.
+      scales.push({name: 'color', type: 'ordinal', range: {data: 'series', field: 'data.color'}})
+    else
+      scales.push({name: 'color', type: 'ordinal', range: 'category10'})
+
     _.extend({
-      data: [
-        {
-          name: 'values',
-          values: values,
-          format: {
-            type: 'json',
-            parse: spec.format
-          }
-        }
-      ],
-      scales: [
-        {
-          name: 'x',
-          type: 'time',
-          range: 'width',
-          domain: {data: 'values', field: 'data.x'}
-        },
-        {
-          name: 'y',
-          type: 'linear',
-          range: 'height',
-          nice: true,
-          domain: {data: 'values', field: 'data.y'}
-        },
-        {
-          name: 'color', type: 'ordinal', range: 'category10'
-        }
-      ],
+      data: data,
+      scales: scales,
       axes: [
         {type: 'x', scale: 'x', tickSizeEnd: 0, title: labels?.x},
         {type: 'y', scale: 'y', title: yLabel}
@@ -93,8 +121,11 @@ class LineChart extends Chart
   generateItems: (values) ->
     if Types.isObject(values)
       items = []
-      _.each values, (series, label) ->
-        _.each series, (datum) ->
+      _.each values, (series, label) =>
+        if Types.isArray(series)
+          series = {values: series}
+        @seriesMap[label] = series
+        _.each series.values, (datum) ->
           items.push({label: label, x: datum.x, y: datum.y})
     else if Types.isArray(values)
       items = values

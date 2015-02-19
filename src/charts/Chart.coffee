@@ -7,17 +7,19 @@ class Chart
 
   constructor: (args) ->
     @options = args ?= {}
-    items = args.items
-    unless items
-      throw new Error('No items provided')
     @$em = $(args.element ? '<div class="chart"></div>')
     # The container is used to determine the bounding dimensions of the chart.
     @$container = $(args.container ? @$em)
     # Remove so cloning in Vega doesn't use the elements.
     delete args.container
     delete args.element
+
+    items = args.items
+    unless items
+      throw new Error('No items provided')
     @items = @generateItems(items)
     @addColors(@items, args.colors ? @DEFAULT_COLORS)
+
 
   render: (args) ->
     args = _.extend(@options, args)
