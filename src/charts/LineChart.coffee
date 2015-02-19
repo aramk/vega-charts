@@ -18,7 +18,8 @@ class LineChart extends Chart
       yValueLengths = _.map values, (value) -> (Math.floor(value.y).toString() ? '').length
       maxYLength = _.max yValueLengths
       tens = maxYLength - 1
-      divisor = 1
+      digitLimit = 3
+      tens = tens - (tens % digitLimit)
       if tens > 1
         divisor = Math.pow(10, tens)
         _.each values, (value) ->
