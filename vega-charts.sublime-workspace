@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"series",
+				"seriesArray"
+			],
+			[
+				"ChartC",
+				"ChartClass"
+			],
+			[
+				"padding",
+				"paddingDiff"
+			],
+			[
 				"Typolo",
 				"TypologySchema"
 			],
@@ -502,23 +514,85 @@
 			[
 				"azimu",
 				"azimuthArray"
-			],
-			[
-				"uper",
-				"upperBinValue"
-			],
-			[
-				"lowerBi",
-				"lowerBinValue"
-			],
-			[
-				"azim",
-				"azimuth"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "src/meteor/chart.html",
+			"settings":
+			{
+				"buffer_size": 113,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 13 files for \"resize\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/Vega.coffee:\n    5    # @param {jQuery|HTMLElement} el - The HTML element to render the chart in.\n    6    # @param {Object} [options]\n    7:   # @param {Boolean} [options.resize=false] - Whether to resize the chart based on the dimensions of\n    8    # the given HTML element. This overrides the height and width set in the spec.\n    9    # @returns {Promise}\n   10    render: (spec, el, options) ->\n   11      options = _.extend({\n   12:       resize: false\n   13      }, options)\n   14      df = Q.defer()\n   ..\n   16      @getSpec(spec).then(\n   17        (spec) ->\n   18:         if options.resize\n   19            padding = _.extend({top: 0, bottom: left: 0, right: 0}, spec.padding)\n   20            spec.width = $el.width() - padding.left - padding.right\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/meteor/chart.coffee:\n   13    delete @data.settings\n   14    args = _.extend({\n   15:     resize: true\n   16    }, settings, @data)\n   17    \n   ..\n   23      throw new Error('Chart type not recognised: ' + type)\n   24  \n   25:   if $container.length > 0 || !args.resize\n   26      width = $container.width()\n   27      height = $container.height()\n\n6 matches across 2 files\n\n\nSearching 13 files for \"400\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/Chart.coffee:\n   20    generateSpec: (args) ->\n   21      args = _.extend({\n   22:       width: 400\n   23:       height: 400\n   24        paddingForbody: 16\n   25        labels: true\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/LineChart.coffee:\n    3    generateSpec: (args) ->\n    4      args = _.extend({\n    5:       width: 400\n    6:       height: 400\n    7        # paddingForbody: 16\n    8      }, args)\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/PieChart.coffee:\n   52    generateSpec: (args) ->\n   53      args = _.extend({\n   54:       width: 400\n   55:       height: 400\n   56        paddingForbody: 16\n   57        labels: true\n\n6 matches across 3 files\n\n\nSearching 13 files for \"resize\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/Vega.coffee:\n    5    # @param {jQuery|HTMLElement} el - The HTML element to render the chart in.\n    6    # @param {Object} [options]\n    7:   # @param {Boolean} [options.resize=false] - Whether to resize the chart based on the dimensions of\n    8    # the given HTML element. This overrides the height and width set in the spec.\n    9    # @returns {Promise}\n   10    render: (spec, el, options) ->\n   11      options = _.extend({\n   12:       resize: false\n   13      }, options)\n   14      df = Q.defer()\n   ..\n   16      @getSpec(spec).then(\n   17        (spec) ->\n   18:         if options.resize\n   19            padding = _.extend({top: 0, bottom: left: 0, right: 0}, spec.padding)\n   20            spec.width = $el.width() - padding.left - padding.right\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/meteor/chart.coffee:\n   13    delete @data.settings\n   14    args = _.extend({\n   15:     resize: true\n   16:     resizeContainer: false\n   17    }, settings, @data)\n   18    \n   ..\n   29    $container.toggle(chart.items.length != 0)\n   30  \n   31:   if args.resizeContainer\n   32      chart.renderPromise.then ->\n   33        $canvas = $('canvas', $chart)\n\n7 matches across 2 files\n\n\nSearching 13 files for \"new chart\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/meteor/chart.coffee:\n   24      throw new Error('Chart type not recognised: ' + type)\n   25    \n   26:   chart = new ChartClass(args)\n   27    $chart = chart.getElement()\n   28    $container.append($chart)\n\n1 match in 1 file\n\n\nSearching 13 files for \".formatter\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/PieChart.coffee:\n    3    render: (args) ->\n    4      vegaDf = super(args)\n    5:     Q.all([vegaDf, args.formatter]).then (results) =>\n    6        [vegaResult, formatter] = results\n    7        view = vegaResult.view\n\n1 match in 1 file\n\n\nSearching 13 files for \"render:\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/Vega.coffee:\n    8    # the given HTML element. This overrides the height and width set in the spec.\n    9    # @returns {Promise}\n   10:   render: (spec, el, options) ->\n   11      options = _.extend({\n   12        resize: false\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/Chart.coffee:\n   14      @addColors(@items, args.colors ? @DEFAULT_COLORS)\n   15  \n   16:   render: (args) ->\n   17      _.extend(@options, args)\n   18      spec = @generateSpec(_.extend(@options, {values: @items}))\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/PieChart.coffee:\n    1  class PieChart extends Chart\n    2  \n    3:   render: (args) ->\n    4      vegaDf = super(args)\n    5      Q.all([vegaDf, args.formatter]).then (results) =>\n\n3 matches across 3 files\n\n\nSearching 13 files for \"{top: 0, bottom: left:\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/Vega.coffee:\n   17        (spec) ->\n   18          if options.resize\n   19:           padding = _.extend({top: 0, bottom: left: 0, right: 0}, spec.padding)\n   20            spec.width = $el.width() - padding.left - padding.right\n   21            spec.height = $el.height() - padding.top - padding.bottom\n\n1 match in 1 file\n\n\nSearching 13 files for \"widht:\"\n\n0 matches across 0 files\n\n\nSearching 13 files for \"width:\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/chart.less:\n   16    border: 1px solid #ddd;\n   17    font: 12px Arial, Helvetica;\n   18:   max-width: 180px;\n   19    max-height: 100px;\n   20    .title {\n   ..\n   22      margin-bottom: 5px;\n   23      float: left;\n   24:     width: 100%;\n   25      .percentage {\n   26        margin-left: 4px;\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/LineChart.coffee:\n    3    generateSpec: (args) ->\n    4      args = _.extend({\n    5:       width: 400\n    6        height: 400\n    7        # paddingForbody: 16\n    .\n   13      labels = args.labels\n   14      _.extend({\n   15:       width: width,\n   16        height: height,\n   17        data: [\n   ..\n   62                    y: {scale: 'y', field: 'data.y'},\n   63                    stroke: {scale: 'color', field: 'data.label'},\n   64:                   strokeWidth: {value: 2}\n   65                  }\n   66                }\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/PieChart.coffee:\n   53    generateSpec: (args) ->\n   54      args = _.extend({\n   55:       width: 400\n   56        height: 400\n   57        paddingForbody: 16\n   ..\n   64      radius = args.radius ? Math.min(height, width) / 2 - paddingForbody\n   65      spec = _.extend({\n   66:       width: width,\n   67        height: height,\n   68        data: [\n\n7 matches across 3 files\n\n\nSearching 13 files for \"generateSpec:\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/Chart.coffee:\n   26    #      dimensions of the given HTML element. If an object is provided, it can contain \"height\" and\n   27    #      \"width\" components. This overrides any height or width values in the spec.\n   28:   generateSpec: (spec) ->\n   29      _.extend({\n   30        width: 400\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/LineChart.coffee:\n    1  class LineChart extends Chart\n    2  \n    3:   generateSpec: (args) ->\n    4      args = super(args)\n    5      values = args.values\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/PieChart.coffee:\n   51      @createPopupElement(title: title, body: body)\n   52  \n   53:   generateSpec: (args) ->\n   54      args = super(args)\n   55      _.extend({\n\n3 matches across 3 files\n\n\nSearching 13 files for \"$el\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/Chart.coffee:\n   39        padding = _.extend({top: 0, bottom: 0, left: 0, right: 0}, spec.padding)\n   40        if resize.width\n   41:         spec.width = $el.width() - padding.left - padding.right\n   42        if resize.height\n   43:         spec.height = $el.height() - padding.top - padding.bottom\n   44      spec\n   45  \n\n2 matches in 1 file\n\n\nSearching 13 files for \"generateUniqueColors\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/Chart.coffee:\n   59  \n   60    addColors: (values, colors) ->\n   61:     itemColors = @generateUniqueColors(colors, values.length)\n   62      _.each values, (item) ->\n   63        item.color ?= itemColors.pop()\n   64  \n   65:   generateUniqueColors: (colors, size) ->\n   66      colors = _.shuffle(colors)\n   67      results = []\n\n2 matches in 1 file\n\n\nSearching 13 files for \"addColors\"\n\n/Users/Aram/Development/Urbanetic/vega-charts/src/charts/Chart.coffee:\n   18      delete args.element\n   19      @items = @generateItems(items)\n   20:     @addColors(@items, args.colors ? @DEFAULT_COLORS)\n   21  \n   22    render: (args) ->\n   ..\n   58    generateItems: (values) -> values\n   59  \n   60:   addColors: (values, colors) ->\n   61      itemColors = @generateUniqueColors(colors, values.length)\n   62      _.each values, (item) ->\n\n2 matches in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 8986,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "src/charts/PieChart.coffee",
+			"settings":
+			{
+				"buffer_size": 4045,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/charts/Chart.coffee",
+			"settings":
+			{
+				"buffer_size": 3126,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Vega.coffee",
+			"settings":
+			{
+				"buffer_size": 1120,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/chart.less",
+			"settings":
+			{
+				"buffer_size": 751,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "package.js",
+			"settings":
+			{
+				"buffer_size": 908,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/charts/LineChart.coffee",
+			"settings":
+			{
+				"buffer_size": 3745,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/meteor/chart.coffee",
+			"settings":
+			{
+				"buffer_size": 1004,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -599,10 +673,30 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/Aram/Development/Urbanetic/vega-charts"
+		"/Users/Aram/Development/Urbanetic/vega-charts",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/charts",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/meteor"
 	],
 	"file_history":
 	[
+		"/Users/Aram/Development/Urbanetic/vega-charts/vega-charts.sublime-project",
+		"/Users/Aram/Development/Urbanetic/vega-charts/.gitignore",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/meteor/chart.coffee",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/charts/PieChart.coffee",
+		"/Users/Aram/Development/Urbanetic/vega-charts/package.js",
+		"/Users/Aram/Development/Urbanetic/vega-charts/versions.json",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/charts/Chart.coffee",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/chart.less",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/meteor/lineChart.coffee",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/meteor/pieChart.coffee",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/Vega.coffee",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/charts/LineChart.coffee",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/meteor/pieChart.html",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/meteor/chart",
+		"/Users/Aram/Development/Urbanetic/vega-charts/LICENSE",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/PieChart.coffee",
+		"/Users/Aram/Development/Urbanetic/vega-charts/src/Chart.coffee",
 		"/Users/Aram/Development/Urbanetic/bismuth-schema/README.md",
 		"/Users/Aram/Development/Urbanetic/bismuth-schema/LICENSE",
 		"/Users/Aram/Development/Urbanetic/bismuth-schema/src/Entities.coffee",
@@ -713,28 +807,11 @@
 		"/Users/Aram/Development/Urbanetic/aurin-esp/app/private/users.json",
 		"/Users/Aram/Development/Urbanetic/aurin-esp/app/common/poll.coffee",
 		"/Users/Aram/Development/Urbanetic/aurin-esp/docs/developers.md",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/docs/css/override.css",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/README.md",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/client/resources/atlasCss.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/.meteor/versions",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/packages.json",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/package.json",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/client/views/reports/pathwayReport.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/client/resources/color.less",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/client/views/reports/commercialReport.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/server/catalyst.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/server/request.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/common/reportGenerator.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/server/assets.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/client/views/layouts/basic.html",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/client/modules/Assets.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/docs/license.md",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/client/views/reports/residentialReport.coffee",
-		"/Users/Aram/Development/Urbanetic/aurin-esp/app/client/views/reports/report.html"
+		"/Users/Aram/Development/Urbanetic/aurin-esp/docs/css/override.css"
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -751,6 +828,67 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"&",
+			"hasColorScale",
+			"colorData",
+			"'values'",
+			"seriesMap",
+			"addColors",
+			"generateUniqueColors",
+			"seriesMap",
+			"color",
+			"colors",
+			"color",
+			"MAX_LABEL_CHARS",
+			"AXIS_PADDING",
+			"CHAR_PIXEL_WIDTH",
+			"generateItems",
+			"yvalue",
+			"em",
+			"container",
+			"$el",
+			"option",
+			"options",
+			"args",
+			"generateSpec:",
+			"options",
+			"chart",
+			"radius",
+			"super",
+			"width",
+			"generateSpec:",
+			"width:",
+			"widht:",
+			"{top: 0, bottom: left:",
+			"render:",
+			".formatter",
+			"item",
+			"new chart",
+			"resize",
+			"400",
+			"chart",
+			"resize",
+			"labels",
+			"[",
+			"createPopupElement",
+			"[",
+			"'[",
+			"'['",
+			"vegaDf",
+			"['",
+			"render",
+			"paddingForbody",
+			"data.",
+			"stocks",
+			"# Collapse the chart if there're no values to show.",
+			"addColors",
+			"paddingForbody",
+			"addColors",
+			"vegaOptions",
+			"width",
+			"pie",
+			"types",
+			"items",
 			"typologies",
 			"typoligies",
 			"Depends.",
@@ -817,68 +955,7 @@
 			"forEachCategoriesField",
 			"createCategoriesSchema",
 			"createCategoriesSchemaFields",
-			"mergeDefaultsWithTemplate",
-			"mergeObjectsWithTemplate",
-			"forEachCategoriesField",
-			"forEachCategoryField",
-			"createCategoriesSchemaFields",
-			"createCategoriesSchema",
-			"createCategoriesSchemaFields",
-			"createCategorySchemaObj",
-			"autoLabel",
-			"toTitleCase",
-			"extendSchema",
-			" =",
-			"mergeDefaultsWithTemplate",
-			"mergeObjectsWithTemplate",
-			"descSchema",
-			"extendClassMap",
-			"Projects = new Meteor.Collection 'projects', schema: ProjectSchema",
-			"AccountsAurin.addCollectionAuthorization Projects",
-			"AccountsAurin.addCollectionAuthorization Projects,",
-			".findByTypology",
-			".type",
-			"typologyCategories",
-			"entityCategories",
-			".units",
-			"getdefault",
-			"default",
-			"units.",
-			"Typologies =",
-			"typologies",
-			"getparam",
-			"findByProjectSelector",
-			"findByProject",
-			"getParameterValues",
-			"mergeDefaultParameters",
-			"getDefaultParameterValues",
-			"  mergeDefaultParameters: (model, defaults) ->",
-			"costEmbodiedFieldSchemas",
-			"energyDemandEmbodiedFieldSchemas",
-			"energyDemandOperationFieldSchemas",
-			"GreenStarTypes",
-			"parameters",
-			".then",
-			".log",
-			"foe;d",
-			"hwat:",
-			"what",
-			".update",
-			".insert",
-			".update",
-			".before.update",
-			"updateQueuedEntities",
-			".after.",
-			"rename",
-			"en_heat",
-			"replaceMap",
-			"* $space.occ",
-			"id",
-			"feature",
-			"Vertex",
-			"tities.findOne",
-			"flatted",
-			"_render3dGeometry"
+			"mergeDefaultsWithTemplate"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -886,6 +963,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"values",
 			"",
 			"EntityParametersSchema",
 			": SchemaUtils.elevationSchema()",
@@ -1012,8 +1090,7 @@
 			"\\n",
 			"",
 			"loginUrl",
-			"",
-			"url"
+			""
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1024,13 +1101,534 @@
 	"groups":
 	[
 		{
+			"selected": 3,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "src/meteor/chart.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 113,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								113,
+								113
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8986,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										255,
+										261
+									],
+									[
+										282,
+										288
+									],
+									[
+										529,
+										535
+									],
+									[
+										679,
+										685
+									],
+									[
+										987,
+										993
+									],
+									[
+										1161,
+										1167
+									],
+									[
+										1457,
+										1460
+									],
+									[
+										1482,
+										1485
+									],
+									[
+										1702,
+										1705
+									],
+									[
+										1727,
+										1730
+									],
+									[
+										1942,
+										1945
+									],
+									[
+										1967,
+										1970
+									],
+									[
+										2312,
+										2318
+									],
+									[
+										2339,
+										2345
+									],
+									[
+										2586,
+										2592
+									],
+									[
+										2736,
+										2742
+									],
+									[
+										3044,
+										3050
+									],
+									[
+										3068,
+										3074
+									],
+									[
+										3213,
+										3219
+									],
+									[
+										3538,
+										3547
+									],
+									[
+										3852,
+										3862
+									],
+									[
+										4211,
+										4218
+									],
+									[
+										4451,
+										4458
+									],
+									[
+										4703,
+										4710
+									],
+									[
+										5046,
+										5068
+									],
+									[
+										5505,
+										5511
+									],
+									[
+										5637,
+										5643
+									],
+									[
+										5857,
+										5863
+									],
+									[
+										6000,
+										6006
+									],
+									[
+										6232,
+										6238
+									],
+									[
+										6448,
+										6454
+									],
+									[
+										6643,
+										6649
+									],
+									[
+										7054,
+										7067
+									],
+									[
+										7254,
+										7267
+									],
+									[
+										7489,
+										7502
+									],
+									[
+										7837,
+										7840
+									],
+									[
+										7939,
+										7942
+									],
+									[
+										8221,
+										8241
+									],
+									[
+										8362,
+										8382
+									],
+									[
+										8679,
+										8688
+									],
+									[
+										8829,
+										8838
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								8684,
+								8684
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 13,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4110.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/charts/PieChart.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4045,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3670,
+								3670
+							]
+						],
+						"settings":
+						{
+							"history_list_is_closing": true,
+							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/charts/Chart.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3126,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								82,
+								82
+							]
+						],
+						"settings":
+						{
+							"history_list_is_closing": true,
+							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/Vega.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1120,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1120,
+								1120
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/chart.less",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 751,
+						"regions":
+						{
+							"gutter_color_167":
+							{
+								"flags": 144,
+								"icon": "Cache/GutterColor/rgba(0, 0, 0, 0.1).png",
+								"regions":
+								[
+									[
+										167,
+										210
+									]
+								],
+								"scope": "gutter_color"
+							},
+							"gutter_color_211":
+							{
+								"flags": 144,
+								"icon": "Cache/GutterColor/#ddd.png",
+								"regions":
+								[
+									[
+										211,
+										236
+									]
+								],
+								"scope": "gutter_color"
+							},
+							"gutter_color_650":
+							{
+								"flags": 144,
+								"icon": "Cache/GutterColor/#999.png",
+								"regions":
+								[
+									[
+										650,
+										666
+									]
+								],
+								"scope": "gutter_color"
+							}
+						},
+						"selection":
+						[
+							[
+								166,
+								166
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/LESS/LESS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "package.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 908,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								908,
+								908
+							]
+						],
+						"settings":
+						{
+							"history_list_is_closing": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				}
 			]
 		},
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 3,
+					"file": "src/charts/Chart.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3126,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								134,
+								134
+							]
+						],
+						"settings":
+						{
+							"history_list_is_closing": true,
+							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/charts/LineChart.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3745,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								241,
+								241
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/meteor/chart.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1004,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								382,
+								382
+							]
+						],
+						"settings":
+						{
+							"history_list_is_closing": true,
+							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -1083,7 +1681,7 @@
 	"project": "vega-charts.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 76.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1091,6 +1689,94 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"chart",
+				"src/meteor/chart.coffee"
+			],
+			[
+				"cahrt.c",
+				"src/charts/Chart.coffee"
+			],
+			[
+				"picahr",
+				"src/charts/PieChart.coffee"
+			],
+			[
+				"piecha",
+				"src/charts/PieChart.coffee"
+			],
+			[
+				"vega",
+				"src/Vega.coffee"
+			],
+			[
+				"charrt",
+				"src/charts/Chart.coffee"
+			],
+			[
+				"picha",
+				"src/charts/PieChart.coffee"
+			],
+			[
+				"cahrt.co",
+				"src/meteor/chart.coffee"
+			],
+			[
+				"linec",
+				"src/charts/LineChart.coffee"
+			],
+			[
+				"pack",
+				"package.js"
+			],
+			[
+				"linechar",
+				"src/meteor/lineChart.coffee"
+			],
+			[
+				"piec",
+				"src/charts/PieChart.coffee"
+			],
+			[
+				"linechart",
+				"src/charts/LineChart.coffee"
+			],
+			[
+				"charts",
+				"vega-charts.sublime-project"
+			],
+			[
+				"piechart",
+				"src/charts/PieChart.coffee"
+			],
+			[
+				"piechaet",
+				"src/charts/PieChart.coffee"
+			],
+			[
+				"piechar",
+				"src/charts/PieChart.coffee"
+			],
+			[
+				"piecahr",
+				"src/meteor/pieChart.coffee"
+			],
+			[
+				"linchart",
+				"src/meteor/lineChart.coffee"
+			],
+			[
+				"pie",
+				"src/charts/PieChart.coffee"
+			],
+			[
+				"poie",
+				"src/meteor/pieChart.coffee"
+			],
+			[
+				"less",
+				"src/chart.less"
+			],
 			[
 				"ent",
 				"src/Entities.coffee"
@@ -1193,10 +1879,6 @@
 			],
 			[
 				"pak",
-				"package.js"
-			],
-			[
-				"pack",
 				"package.js"
 			],
 			[
@@ -1334,10 +2016,6 @@
 			[
 				"typform",
 				"app/client/views/forms/typologyForm.coffee"
-			],
-			[
-				"less",
-				"app/client/resources/layout.less"
 			],
 			[
 				"main",
@@ -1522,86 +2200,6 @@
 			[
 				"lotilterform",
 				"app/client/views/forms/lotFilterForm.coffee"
-			],
-			[
-				"lofilt",
-				"app/client/views/forms/lotFilterForm.html"
-			],
-			[
-				"geomeu",
-				"app/client/modules/GeometryUtils.coffee"
-			],
-			[
-				"geomu",
-				"app/client/modules/GeometryUtils.coffee"
-			],
-			[
-				"lotfomr",
-				"app/client/views/forms/lotForm.html"
-			],
-			[
-				"lotfilterofm",
-				"app/client/views/forms/lotFilterForm.html"
-			],
-			[
-				"lotfli",
-				"app/client/views/forms/lotFilterForm.html"
-			],
-			[
-				"tyool",
-				"app/collections/typologies.coffee"
-			],
-			[
-				"precic",
-				"app/client/views/reports/precinctReport.coffee"
-			],
-			[
-				"grutnfile",
-				"Gruntfile.js"
-			],
-			[
-				"gruntf",
-				"Gruntfile.js"
-			],
-			[
-				"typol.",
-				"app/collections/typologies.coffee"
-			],
-			[
-				"migra",
-				"app/server/startup/migrations.coffee"
-			],
-			[
-				"projects.html",
-				"app/client/views/states/projects.html"
-			],
-			[
-				"authutil",
-				"app/common/AuthUtils.coffee"
-			],
-			[
-				"projectutils",
-				"app/common/ProjectUtils.coffee"
-			],
-			[
-				"oroejcts",
-				"app/tests/common/projects.js"
-			],
-			[
-				"aut",
-				"app/common/AuthUtils.coffee"
-			],
-			[
-				"projecttuils",
-				"app/common/ProjectUtils.coffee"
-			],
-			[
-				"public",
-				"app/server/publications.coffee"
-			],
-			[
-				"layou",
-				"app/client/resources/layout.less"
 			]
 		],
 		"width": 0.0
@@ -1638,14 +2236,14 @@
 		],
 		"width": 400.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},
 	"show_minimap": false,
 	"show_open_files": true,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 261.0,
 	"status_bar_visible": true,
 	"template_settings":

@@ -37,21 +37,20 @@ class LineChart extends Chart
       }
     ]
     
-    scales = [
-      {
-        name: 'x',
-        type: 'time',
-        range: 'width',
-        domain: {data: 'values', field: 'data.x'}
-      },
-      {
-        name: 'y',
-        type: 'linear',
-        range: 'height',
-        nice: true,
-        domain: {data: 'values', field: 'data.y'}
-      }
-    ]
+    xScale =
+      name: 'x'
+      type: 'linear'
+      range: 'width'
+      domain: {data: 'values', field: 'data.x'}
+    if @options.format?.x == 'date'
+      xScale.type = 'time'
+    yScale =
+      name: 'y'
+      type: 'linear'
+      range: 'height'
+      nice: true
+      domain: {data: 'values', field: 'data.y'}
+    scales = [xScale, yScale]
 
     seriesArray = _.values(@seriesMap)
 
@@ -127,7 +126,12 @@ class LineChart extends Chart
           series = {values: series}
         @seriesMap[label] = series
         _.each series.values, (datum) ->
-          items.push({label: label, x: datum.x, y: datum.y})
+          item = {x: datum.x, y: datum.y}
+          items.push(item)
+          label = series.label ? label
+          if label == false
+            label = ''
+          item.label = label
     else if Types.isArray(values)
       items = values
     else
