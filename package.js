@@ -1,7 +1,7 @@
 // Meteor package definition.
 Package.describe({
   name: 'aramk:vega-charts',
-  version: '0.2.2',
+  version: '0.3.0',
   summary: 'Simple charting with Vega and D3.',
   git: 'https://github.com/aramk/vega-charts.git'
 });
