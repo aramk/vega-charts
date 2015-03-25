@@ -20,7 +20,6 @@ class Chart
     @items = @generateItems(items)
     @addColors(@items, args.colors ? @DEFAULT_COLORS)
 
-
   render: (args) ->
     args = _.extend(@options, args)
     spec = @generateSpec(_.extend(args, {values: @items}))
@@ -60,9 +59,14 @@ class Chart
   generateItems: (values) -> values
 
   addColors: (values, colors) ->
-    itemColors = @generateUniqueColors(colors, values.length)
+    itemColors = Setter.clone(colors)
+    lenDiff = values.length - colors.length
+    if lenDiff > 0
+      # Generate unique colors for remaining items which cannot be assigned one of the predefined
+      # colors.
+      itemColors = itemColors.concat(@generateUniqueColors(colors, lenDiff))
     _.each values, (item) ->
-      item.color ?= itemColors.pop()
+      item.color ?= itemColors.shift()
 
   generateUniqueColors: (colors, size) ->
     colors = _.shuffle(colors)
@@ -90,6 +94,19 @@ class Chart
     $em.css('top', event.clientY + offset.y)
 
   DEFAULT_COLORS: [
+    '#3695ff'
+    '#75b313'
+    '#ffba14'
+    '#7c3dff'
+    '#00e37d'
+    '#ff9314'
+    '#ff1414'
+    '#f9ec15'
+    '#7f0894'
+    '#b6095b'
+  ]
+
+  RAINBOW_COLORS: [
     '#ff1414'
     '#ff9314'
     '#ffba14'
