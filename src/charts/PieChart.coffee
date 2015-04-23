@@ -128,7 +128,7 @@ class PieChart extends Chart
       items = []
       _.each values, (value, label) ->
         item = if Types.isObject(value) then value else {value: value}
-        item.label = label
+        item.label ?= label
         items.push(item)
     else if Types.isArray(values)
       items = values
