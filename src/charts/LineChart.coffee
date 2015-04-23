@@ -119,7 +119,7 @@ class LineChart extends Chart
     }, spec)
 
   generateItems: (values) ->
-    if Types.isObject(values)
+    if Types.isObjectLiteral(values)
       items = []
       _.each values, (series, label) =>
         if Types.isArray(series)

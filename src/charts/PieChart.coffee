@@ -124,7 +124,7 @@ class PieChart extends Chart
     spec
 
   generateItems: (values) ->
-    if Types.isObject(values)
+    if Types.isObjectLiteral(values)
       items = []
       _.each values, (value, label) ->
         item = if Types.isObject(value) then value else {value: value}
