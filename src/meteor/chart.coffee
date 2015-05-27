@@ -4,10 +4,16 @@ ChartClasses =
   line: LineChart
   pie: PieChart
 
-TemplateClass.rendered = ->
-  $container = @$('.chart-container')
-  $title = @$('.chart-title')
+TemplateClass.created = ->
+  @renderDf = Q.defer()
+
+TemplateClass.rendered = -> @renderDf.resolve()
   
+renderChart = ->
+  # Remove any existing content when rendering a new chart.
+  $container = @$('.chart-container').empty()
+  $title = @$('.chart-title')
+
   # Allow either attributes or a "settings" object.
   settings = @data.settings
   delete @data.settings
@@ -26,7 +32,7 @@ TemplateClass.rendered = ->
   chart = new ChartClass(args)
   $chart = chart.getElement()
   $container.append($chart)
-  $container.toggle(chart.items.length != 0)
+  $container.toggle(chart.items.length > 0)
   # Delay rendering to allow resizing to the container size.
   chart.render()
 
@@ -38,3 +44,12 @@ TemplateClass.rendered = ->
 
   if args.title
     $title.html(args.title)
+
+TemplateClass.helpers
+  hasItems: -> !_.isEmpty(@items)
+  chart: ->
+    template = Template.instance()
+    template.renderDf.promise.then ->
+      renderChart.call(template)
+    # Don't render anything from the helper
+    return undefined

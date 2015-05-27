@@ -1,5 +1,10 @@
 <template name="chart">
-  <div class="chart-container">
+  <div class="chart">
     <div class="chart-title"></div>
+    <div class="chart-container">
+      {{#if hasItems}}
+        {{chart}}
+      {{/if}}
+    </div>
   </div>
 </template>
