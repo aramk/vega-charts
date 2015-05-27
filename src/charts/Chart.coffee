@@ -21,9 +21,9 @@ class Chart
     @addColors(@items, args.colors ? @DEFAULT_COLORS)
 
   render: (args) ->
-    args = _.extend(@options, args)
-    spec = @generateSpec(_.extend(args, {values: @items}))
-    console.log('spec', spec)
+    args = Setter.merge Setter.clone(@options), args, {values: @items}
+    spec = @generateSpec(args)
+    Logger.debug('Chart spec', spec)
     @renderPromise = Vega.render(spec, @$em, args)
 
   getElement: -> @$em

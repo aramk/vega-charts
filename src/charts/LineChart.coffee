@@ -52,6 +52,14 @@ class LineChart extends Chart
       domain: {data: 'values', field: 'data.y'}
     scales = [xScale, yScale]
 
+    axesX = {type: 'x', scale: 'x', tickSizeEnd: 0, title: labels?.x, format: 'd'}
+    axesY = {type: 'y', scale: 'y', title: yLabel}
+    axes = [axesX, axesY]
+    axesOptions = @options.axes
+    if axesOptions
+      _.extend axesX, axesOptions.x
+      _.extend axesY, axesOptions.y
+      delete spec.axes
     seriesArray = _.values(@seriesMap)
 
     seriesData = {
@@ -75,10 +83,7 @@ class LineChart extends Chart
     _.extend({
       data: data,
       scales: scales,
-      axes: [
-        {type: 'x', scale: 'x', tickSizeEnd: 0, title: labels?.x},
-        {type: 'y', scale: 'y', title: yLabel}
-      ],
+      axes: axes,
       marks: [
         {
           type: 'group',
