@@ -15,7 +15,7 @@ Package.onUse(function (api) {
     'templating',
     'underscore',
     'aramk:q@1.0.1',
-    'aramk:utility@0.3.0',
+    'urbanetic:utility@1.0.0',
     'aramk:vega@1.4.2_1'
     ],'client');
   api.imply('aramk:vega');
