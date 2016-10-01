@@ -23,8 +23,36 @@ class Chart
   render: (args) ->
     args = Setter.merge Setter.clone(@options), args, {values: @items}
     spec = @generateSpec(args)
-    Logger.debug('Chart spec', spec)
+    Logger.debug('Chart spec', spec, args)
     @renderPromise = Vega.render(spec, @$em, args)
+
+    if args.popups
+      Q.all([@renderPromise, args.formatter]).then (results) =>
+        [vegaResult, formatter] = results
+        view = vegaResult.view
+        valueSum = Maths.sum @items, (item) -> item.value
+        popups = []
+        getOrCreatePopup = (item) =>
+          index = item.datum.index
+          $popup = popups[index]
+          unless $popup
+            $popup = @createPopup(item, valueSum, formatter)
+            $('body').append($popup)
+            popups[index] = $popup
+          $popup
+        view.on 'mouseover', (event, item) =>
+          $popup = getOrCreatePopup(item)
+          if $popup
+            $popup.show()
+            @setPositionFromEvent($popup, event)
+        view.on 'mousemove', (event, item) =>
+          $popup = getOrCreatePopup(item)
+          @setPositionFromEvent($popup, event) if $popup
+        view.on 'mouseout', (event, item) ->
+          $popup = getOrCreatePopup(item)
+          $popup.hide() if $popup
+
+    @renderPromise
 
   getElement: -> @$em
 
@@ -87,6 +115,28 @@ class Chart
     $em.append($('<div class="title">' + title + '</div>')) if title?
     $em.append($('<div class="body">' + body + '</div>')) if body?
     $em
+
+  createPopup: (item, valueSum, formatter) ->
+    data = item.datum.data
+    index = item.datum.index
+    value = data.value
+    units = data.units
+    percentage = value / valueSum
+    if formatter
+      try
+        value = formatter(value)
+      catch e
+        console.error('Error formatting popup', e)
+    else
+      round = data.round ? 2
+      value = value.toFixed(round) if round
+    title = '<div class="label">' + data.label + '</div>'
+    title += '<div class="percentage">' + Strings.format.percentage(percentage) + '</div>'
+    body = data.text
+    unless body
+      body = '<div class="value">' + value + '</div>'
+      body += '<div class="units">' + units + '</div>' if units?
+    @createPopupElement(title: title, body: body)
 
   setPositionFromEvent: ($em, event) ->
     offset = {x: 10, y: 0}

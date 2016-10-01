@@ -3,6 +3,7 @@ TemplateClass = Template.chart
 ChartClasses =
   line: LineChart
   pie: PieChart
+  bar: BarChart
 
 TemplateClass.created = ->
   @renderDf = Q.defer()
