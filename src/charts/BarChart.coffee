@@ -4,8 +4,8 @@ class BarChart extends Chart
   seriesMap: null
 
   constructor: (args) ->
-    @seriesMap = {}
     super(args)
+    @seriesMap = {}
 
   render: (args) ->
     args = _.extend(@options, {
