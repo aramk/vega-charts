@@ -1,10 +1,10 @@
 aramk:q@1.0.1_1
 aramk:vega@1.4.2_1
-aramk:vega-charts@0.3.2
+aramk:vega-charts@1.0.0
 base64@1.0.3
 blaze@2.1.2
 blaze-tools@1.0.3
-coffeescript@1.0.6
+coffeescript@2.2.1_1
 d3js:d3@3.4.13
 deps@1.0.7
 ejson@1.0.6

@@ -4,8 +4,8 @@ class LineChart extends Chart
   seriesMap: null
 
   constructor: (args) ->
-    @seriesMap = {}
     super(args)
+    @seriesMap = {}
 
   generateSpec: (spec) ->
     spec = super(spec)

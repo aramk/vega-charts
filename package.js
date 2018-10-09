@@ -1,13 +1,13 @@
 // Meteor package definition.
 Package.describe({
   name: 'aramk:vega-charts',
-  version: '0.4.0',
+  version: '1.0.0',
   summary: 'Simple charting with Vega and D3.',
   git: 'https://github.com/aramk/vega-charts.git'
 });
 
 Package.onUse(function (api) {
-  api.versionsFrom('METEOR@1.2.0.1');
+  api.versionsFrom('METEOR@1.6.1');
   api.use([
     'coffeescript',
     'jquery',
@@ -15,7 +15,7 @@ Package.onUse(function (api) {
     'templating',
     'underscore',
     'aramk:q@1.0.1',
-    'urbanetic:utility@1.2.0',
+    'urbanetic:utility@2.0.1',
     'aramk:vega@1.4.2_1'
     ],'client');
   api.imply('aramk:vega');
